@@ -30,7 +30,7 @@ class Book extends Component {
                 {
                     Array.isArray(details.authors) &&
                     <div className="book-authors">
-                        {details.authors.map((author, i) => `${author}${(i + 1) === details.authors.length ? "" : ", "}`)}
+                        {details.authors.join(', ')}
                     </div>
                 }
             </div>
@@ -39,7 +39,8 @@ class Book extends Component {
 }
 
 Book.propTypes = {
-    details: PropTypes.object.isRequired
+    details: PropTypes.object.isRequired,
+    onChangeFunction: PropTypes.func.isRequired
 };
 
 export default Book;

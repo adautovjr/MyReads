@@ -5,6 +5,20 @@ import BookShelf from '../components/BookShelf';
 class Search extends Component {
     render() {
         const { query, books, updateBookShelf, updateQuery } = this.props;
+        const SHELVES = [
+            {
+                title: 'Currently Reading',
+                id: 'currentlyReading'
+            },
+            {
+                title: 'Want To Read',
+                id: 'wantToRead'
+            },
+            {
+                title: 'Read',
+                id: 'read'
+            }
+        ];
 
         return (
             <div className="search-books">
@@ -17,16 +31,16 @@ class Search extends Component {
                 <div className="search-books-results">
                     <BookShelf onChangeFunction={updateBookShelf} books={books.filter(book => (book.shelf === "none" || book.shelf === undefined))} title="Search results" />
                     {
-                        query.length > 0 && 
+                        query.length > 0 &&
                         <div>
-                            {books.filter(book => book.shelf === "currentlyReading").length > 0 &&
-                                <BookShelf onChangeFunction={updateBookShelf} books={books.filter(book => book.shelf === "currentlyReading")} title="Currently Reading" />
-                            }
-                            {books.filter(book => book.shelf === "wantToRead").length > 0 &&
-                                <BookShelf onChangeFunction={updateBookShelf} books={books.filter(book => book.shelf === "wantToRead")} title="Want to Read" />
-                            }
-                            {books.filter(book => book.shelf === "read").length > 0 &&
-                                <BookShelf onChangeFunction={updateBookShelf} books={books.filter(book => book.shelf === "read")} title="Read" />
+                            {
+                                SHELVES.map((shelf, id) => (
+                                    <div key={id}>
+                                        {books.some(book => book.shelf === shelf.id) &&
+                                            <BookShelf onChangeFunction={updateBookShelf} books={books.filter(book => book.shelf === shelf.id)} title={shelf.title} />
+                                        }
+                                    </div>
+                                ))
                             }
                         </div>
                     }

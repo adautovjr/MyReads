@@ -15,63 +15,53 @@ class BooksApp extends Component {
         books: []
     }
 
-    loadMyBooks = () => {
-        BooksAPI.getAll()
-            .then(books => {
-                this.setState({
-                    books
-                })
-            });
+    loadMyBooks = async () => {
+        const books = await BooksAPI.getAll();
+        this.setState({ books });
     }
 
-    updateBookShelf = (details, shelf) => {
-        BooksAPI.update(details, shelf)
-            .then(shelves => {
-                let books = this.state.books;
-                books.map(book => {
-                    if (shelves["currentlyReading"].includes(book.id)) {
-                        book.shelf = "currentlyReading";
-                    } else if (shelves["read"].includes(book.id)) {
-                        book.shelf = "read";
-                    } else if (shelves["wantToRead"].includes(book.id)) {
-                        book.shelf = "wantToRead";
-                    } else {
-                        book.shelf = "none";
-                    }
-                    return false;
-                });
-                this.setState({
-                    books
-                });
-            })
+    updateBookShelf = async (details, shelf) => {
+        const shelves = BooksAPI.update(details, shelf);
+        let books = this.state.books;
+
+        books.map(book => {
+            if (shelves["currentlyReading"].includes(book.id)) {
+                book.shelf = "currentlyReading";
+            } else if (shelves["read"].includes(book.id)) {
+                book.shelf = "read";
+            } else if (shelves["wantToRead"].includes(book.id)) {
+                book.shelf = "wantToRead";
+            } else {
+                book.shelf = "none";
+            }
+            return false;
+        });
+        this.setState({ books });
     }
 
-    updateQuery = (query) => {
+    updateQuery = async (query) => {
         this.setState({
             query
         });
         if (query.trim().length > 0) {
-            BooksAPI.search(query.trim())
-                .then(books => {
-                    BooksAPI.getAll()
-                        .then(myBooks => {
-                            books.map(book => {
-                                const bookIn = myBooks.find(myBook => myBook.id === book.id);
-                                if (bookIn !== undefined) {
-                                    book.shelf = bookIn.shelf;
-                                    return true;
-                                }
-                                return false;
-                            })
-                            this.setState({
-                                books
-                            });
-                        });
-                }).catch(a => console.log(a));
-        } else {
+            const books = await BooksAPI.search(query.trim())
+            const myBooks = await BooksAPI.getAll()
+
+            if (Array.isArray(books)) {
+                books.map(book => {
+                    const bookIn = myBooks.find(myBook => myBook.id === book.id);
+                    if (bookIn !== undefined) {
+                        book.shelf = bookIn.shelf;
+                        return true;
+                    }
+                    return false;
+                })
+            }
             this.setState({
-                books: []
+                books: Array.isArray(books) ? books : []
             });
+        } else {
+            this.setState({ books: [] });
         }
     }
 
