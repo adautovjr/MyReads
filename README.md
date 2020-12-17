@@ -1,6 +1,6 @@
 # MyReads Project
 
-This is an Udacity's React course project submission. The goal of this application is to catalog and classify a range of books into 3 categories: `Currently reading`, `Want to read`, `Read`. With this project, I was able to learn and practice the basics of React and face the challenges a real-world React developer would usually be required to overcome.
+This is an Udacity's React course project submission where I used only React to develop a way to catalog and classify a range of books into 3 categories: `Currently reading`, `Want to read`, `Read`. With this project, I was able to learn and practice the basics of React and face the challenges a real-world React developer would usually be required to overcome.
 
 ## TL;DR
 
