@@ -21,7 +21,7 @@ class BooksApp extends Component {
     }
 
     updateBookShelf = async (details, shelf) => {
-        const shelves = BooksAPI.update(details, shelf);
+        const shelves = await BooksAPI.update(details, shelf);
         let books = this.state.books;
 
         books.map(book => {
